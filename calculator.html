@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calculator for PC — by Hamik</title>
+  <meta name="description" content="Calculator for PC — simple online calculator without ads. By Hamik.">
+  <meta name="keywords" content="calculator for pc, online calculator, no ads, Hamik">
+  <meta name="author" content="Hamik">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 340px;
+    }
+    .top {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      justify-content:center;
+      margin-bottom:12px;
+    }
+    .logo {
+      width:44px;
+      height:44px;
+      border-radius:8px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(180deg,#ffffff,#f1f1f1);
+      box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    }
+    .logo img{ width:28px; height:28px; }
+    .title { font-size:18px; font-weight:700; }
+    .subtitle { font-size:12px; color:#666; margin-top:4px; }
+    #display {
+      width: 90%;
+      padding: 12px 10px;
+      margin: 8px 0 14px 0;
+      font-size: 20px;
+      text-align: right;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      outline: none;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    button {
+      padding: 16px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: transform .06s, filter .2s;
+    }
+    button:hover { filter: brightness(1.1); }
+    button:active { transform: translateY(2px); }
+    .operator{ background:#f39c12; color:#fff; }
+    .equal{ background:#3498db; color:#fff; }
+    .clear{ grid-column: span 4; background:#e74c3c; }
+    footer{ font-size:12px; color:#444; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <div class="container" role="main" aria-label="Calculator for PC by Hamik">
+    <div class="top">
+      <div class="logo" title="Calculator for PC">
+        <img src="https://cdn-icons-png.flaticon.com/512/126/126486.png" alt="logo">
+      </div>
+      <div>
+        <div class="title">Calculator for PC</div>
+        <div class="subtitle">by <strong>Hamik</strong></div>
+      </div>
+    </div>
+
+    <input id="display" disabled placeholder="0">
+
+    <div class="buttons">
+      <button onclick="addValue('7')">7</button>
+      <button onclick="addValue('8')">8</button>
+      <button onclick="addValue('9')">9</button>
+      <button class="operator" onclick="addValue('/')">÷</button>
+
+      <button onclick="addValue('4')">4</button>
+      <button onclick="addValue('5')">5</button>
+      <button onclick="addValue('6')">6</button>
+      <button class="operator" onclick="addValue('*')">×</button>
+
+      <button onclick="addValue('1')">1</button>
+      <button onclick="addValue('2')">2</button>
+      <button onclick="addValue('3')">3</button>
+      <button class="operator" onclick="addValue('-')">−</button>
+
+      <button onclick="addValue('0')">0</button>
+      <button onclick="addValue('.')">.</button>
+      <button class="equal" onclick="calculate()">=</button>
+      <button class="operator" onclick="addValue('+')">+</button>
+
+      <button class="clear" onclick="clearDisplay()">C</button>
+    </div>
+
+    <footer>Fast • No ads • by Hamik</footer>
+  </div>
+
+<script>
+  function addValue(val) {
+    const d = document.getElementById("display");
+    const lastChar = d.value.slice(-1);
+
+    // Не даём два оператора подряд
+    if (['+', '-', '*', '/'].includes(lastChar) && ['+', '-', '*', '/'].includes(val)) return;
+
+    // Не даём две точки в числе
+    if (val === '.' && d.value.slice(d.value.lastIndexOf(lastChar)).includes('.')) return;
+
+    if (d.value === "Error" || d.value === "") {
+      d.value = val;
+    } else {
+      d.value += val;
+    }
+  }
+
+  function clearDisplay() {
+    document.getElementById("display").value = "";
+  }
+
+  function calculate() {
+    const d = document.getElementById("display");
+    try {
+      // Преобразуем знаки и безопасно вычисляем
+      const expr = d.value.replace(/×/g, '*').replace(/÷/g, '/');
+      d.value = Function('"use strict"; return (' + expr + ')')();
+    } catch {
+      d.value = "Error";
+    }
+  }
+</script>
+</body>
+</html>
